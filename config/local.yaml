@@ -1,0 +1,2 @@
+env: "local" # prod, dev
+storage_path: "./storage/"
