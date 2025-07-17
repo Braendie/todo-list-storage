@@ -7,6 +7,8 @@ import (
 	"log"
 
 	"github.com/Braendie/todo-list-storage/internal/models"
+	"github.com/Braendie/todo-list-storage/internal/storage"
+	"github.com/lib/pq"
 )
 
 type Storage struct {
@@ -36,6 +38,10 @@ func (s *Storage) CreateTask(ctx context.Context, title string, description stri
 
 	res, err := stmt.ExecContext(ctx, title, description)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			return 0, storage.ErrAlreadyExists
+		}
+
 		return 0, fmt.Errorf("%s: %w", op, err)
 	}
 
@@ -70,6 +76,10 @@ func (s *Storage) GetTasks(ctx context.Context) ([]models.Task, error) {
 		tasks = append(tasks, task)
 	}
 
+	if len(tasks) == 0 {
+		return nil, storage.ErrNotFound
+	}
+
 	return tasks, nil
 }
 
@@ -83,6 +93,10 @@ func (s *Storage) UpdateTask(ctx context.Context, id int64) error {
 
 	_, err = stmt.ExecContext(ctx, id)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23503" {
+			return storage.ErrNotFound
+		}
+
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
@@ -99,6 +113,10 @@ func (s *Storage) DeleteTask(ctx context.Context, id int64) error {
 
 	_, err = stmt.ExecContext(ctx, id)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23503" {
+			return storage.ErrNotFound
+		}
+		
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
