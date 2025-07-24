@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -11,6 +12,13 @@ import (
 type Config struct {
 	Env         string `yaml:"env" env-default:"local"`
 	StoragePath string `yaml:"storage_path" env-required:"true"`
+	Server      Server `yaml:"server"`
+}
+
+type Server struct {
+	Port    int           `yaml:"port" env-default:"8081"`
+	Address string        `yaml:"address" env-default:"localhost`
+	Timeout time.Duration `yaml:"timeout" env-default:"60s"`
 }
 
 func MustLoad() *Config {

@@ -1,2 +1,6 @@
 env: "local" # prod, dev
 storage_path: "./storage/"
+server:
+  address: "localhost"
+  port: 8081
+  timeout: 60s
