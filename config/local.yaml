@@ -1,5 +1,7 @@
 env: "local" # prod, dev
-storage_path: "./storage/"
+storage_path: "postgres://braedie:qwerty12345@?:?/todo-list?sslmode=disable"
+migrations_path: "./migrations"
+migrations_test_path: "./tests/migrations"
 server:
   address: "localhost"
   port: 8081

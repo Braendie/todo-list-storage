@@ -18,7 +18,7 @@ func Start() {
 
 	logger := logger.MustLoad(cfg)
 
-	storage := pgsql.New(cfg.StoragePath)
+	storage := pgsql.New(cfg.StoragePostgresCon)
 
 	storageService := storageService.New(logger, storage)
 
