@@ -35,7 +35,7 @@ type TaskDeleter interface {
 }
 
 type TaskUpdater interface {
-	UpdateTask(ctx context.Context, id int64, title string, description string) error
+	UpdateTask(ctx context.Context, id int64) error
 }
 
 var (
@@ -114,7 +114,7 @@ func (s *StorageService) DeleteTask(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (s *StorageService) UpdateTask(ctx context.Context, id int64, title string, description string) error {
+func (s *StorageService) UpdateTask(ctx context.Context, id int64) error {
 	const op = "service.StorageService.UpdateTask"
 
 	s.log.With(
@@ -122,7 +122,7 @@ func (s *StorageService) UpdateTask(ctx context.Context, id int64, title string,
 		slog.Int64("id", id),
 	)
 
-	err := s.storage.UpdateTask(ctx, id, title, description)
+	err := s.storage.UpdateTask(ctx, id)
 	if err != nil {
 		if errors.Is(err, storage.ErrNotFound) {
 			s.log.Warn("Task not found for update", slog.String("op", op), slog.Int64("id", id))

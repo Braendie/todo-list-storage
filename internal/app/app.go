@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/Braendie/todo-list-storage/internal/config"
 	"github.com/Braendie/todo-list-storage/internal/lib/logger"
+	"github.com/Braendie/todo-list-storage/internal/storage/pgsql"
 )
 
 func Start() {
@@ -11,7 +12,7 @@ func Start() {
 
 	logger := logger.MustLoad(cfg)
 
-	// TODO: реализовать storage
+	storage := pgsql.New(cfg.StoragePath)
 
 	// TODO: реализовать grpc
 }
