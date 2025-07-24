@@ -92,7 +92,7 @@ func (s *serverAPI) List(ctx context.Context, _ *emptypb.Empty) (*storagev1.List
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	var resTasks []*storagev1.Task
+	resTasks := make([]*storagev1.Task, 0, len(tasks))
 	for _, val := range tasks {
 		resTasks = append(resTasks, &storagev1.Task{
 			TaskId:      val.ID,
